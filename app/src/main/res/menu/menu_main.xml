@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_menu_main_theme"
+        android:orderInCategory="1"
+        android:title="@string/menu_setting_theme"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_menu_main_mode"
+        android:orderInCategory="2"
+        android:title="@string/menu_recycler_mode"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_menu_main_donate"
+        android:orderInCategory="3"
+        android:title="@string/menu_donate"
+        app:showAsAction="never" />
+</menu>

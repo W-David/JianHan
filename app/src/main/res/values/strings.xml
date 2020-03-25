@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Jian Han</string>
+    <string name="nav_image_dec">This is nav image</string>
+    <string name="nav_title">Hi,Coody</string>
+    <string name="nav_first_title">Search</string>
+    <string name="nav_setting">Settings</string>
+    <string name="nav_second_title">Download</string>
+    <string name="nav_third_title">Favorite</string>
+    <string name="nav_fourth_title">Tools</string>
+    <string name="nav_fifth_title">Others</string>
+    <string name="nav_about">About</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="loading_text">加载中…</string>
+    <string name="not_more_text">（o´・ェ・｀o）</string>
+    <string name="start_text">By Coody</string>
+    <string name="title_setting">Settings</string>
+    <string name="nav_drawer_open">Drawer open</string>
+    <string name="nav_drawer_close">Drawer close</string>
+    <string name="menu_setting_theme">theme</string>
+    <string name="menu_recycler_mode">mode</string>
+    <string name="menu_donate">donate</string>
+</resources>
