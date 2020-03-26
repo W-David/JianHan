@@ -43,6 +43,7 @@ dependencies {
     // load
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     // rx
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation "io.reactivex.rxjava2:rxjava:2.2.16"
@@ -59,6 +60,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     // other
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
     // test
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

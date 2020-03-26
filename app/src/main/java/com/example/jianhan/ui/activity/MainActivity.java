@@ -84,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+//        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
         // tab layout setting
-        List<String> titles = Arrays.asList("MOE","COS","GAME");
+        List<String> titles = Arrays.asList("动漫","角色扮演","游戏");
         viewPager.setOffscreenPageLimit(titles.size()-1);
         for(String title: titles){
             tabLayout.addTab(tabLayout.newTab().setText(title));
@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.nav_search:
+                Intent intentToQuery = new Intent(this, QueryActivity.class);
+                startActivity(intentToQuery);
                 break;
             case R.id.nav_download:
                 break;
@@ -116,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_setting:
                 break;
             case R.id.nav_about:
+                Intent intentToAbout = new Intent(this,AboutActivity.class);
+                startActivity(intentToAbout);
                 break;
             default:
                 break;

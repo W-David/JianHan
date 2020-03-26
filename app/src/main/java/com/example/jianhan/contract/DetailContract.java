@@ -12,8 +12,6 @@ public interface DetailContract {
 
         void hideProgressBar();
 
-        void showProgressBar();
-
         void initDetailImg();
 
     }

@@ -11,6 +11,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.jianhan.R;
 import com.example.jianhan.model.bean.MoeDatum;
 import com.example.jianhan.util.IntentUtil;
@@ -42,6 +45,13 @@ public class MoeImgViewHolder extends RecyclerView.ViewHolder implements View.On
     public void bindData(MoeDatum moeDatum){
         this.meoDatum = moeDatum;
         title.setText(meoDatum.getTitle());
-        Glide.with(context).load(meoDatum.getThumbnail()).into(thumbnail);
+        DrawableCrossFadeFactory fadeFactory = new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
+        Glide.with(context)
+                .load(moeDatum.getThumbnail())
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade(fadeFactory))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.color.white)
+                .into(thumbnail);
     }
 }

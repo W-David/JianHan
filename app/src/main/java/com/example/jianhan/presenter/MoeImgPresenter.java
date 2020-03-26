@@ -1,6 +1,5 @@
 package com.example.jianhan.presenter;
 
-import android.util.Log;
 
 import com.example.jianhan.contract.MoeImgContract;
 import com.example.jianhan.model.bean.MoeImg;

@@ -90,7 +90,7 @@ public class GamerSkyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_item,parent,false);
             return new GamerSkyViewHolder(view);
         }else if(viewType == FOOTER){
-            View view = LayoutInflater.from(parent.getContext()) .inflate(R.layout.fragment_recycler_footer,parent,false);
+            View view = LayoutInflater.from(parent.getContext()) .inflate(R.layout.recycler_footer,parent,false);
             return new FooterViewHolder(view);
         }else{
             View view = LayoutInflater.from(parent.getContext()) .inflate(R.layout.fragment_recycler_bottom,parent,false);
@@ -115,7 +115,7 @@ public class GamerSkyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return items.size();
     }
 
-    static class Item{
+    private static class Item{
 
         private int type;
         private GamerDatum gamerDatum;

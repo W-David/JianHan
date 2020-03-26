@@ -19,11 +19,15 @@ public interface QueryContract {
         void showQueryImg(MoeImg moeImg);
 
         void appendQueryImg(MoeImg moeImg);
+
+        void showEmptyResult();
+
+        void showBottom();
     }
 
     interface Presenter extends BasePresenter<View>{
 
-        void refresh();
+        void refresh(String queryString);
 
         void loadMore();
     }

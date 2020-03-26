@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jian Han</string>
+    <string name="app_name">简函</string>
     <string name="nav_image_dec">This is nav image</string>
     <string name="nav_title">Hi,Coody</string>
     <string name="nav_first_title">Search</string>
@@ -12,8 +12,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="loading_text">加载中…</string>
-    <string name="not_more_text">（o´・ェ・｀o）</string>
+    <string name="loading_text">全速加载中…</string>
+    <string name="not_more_text">人家没有啦，真的没有啦，嘿嘿</string>
     <string name="start_text">By Coody</string>
     <string name="title_setting">Settings</string>
     <string name="nav_drawer_open">Drawer open</string>
@@ -21,4 +21,19 @@
     <string name="menu_setting_theme">theme</string>
     <string name="menu_recycler_mode">mode</string>
     <string name="menu_donate">donate</string>
+    <string name="app_designed_by">Design by coody on china</string>
+    <string name="about_card1_message">你来啦，快逛逛吧</string>
+    <string name="card_about_one_text">不要走开哦</string>
+    <string name="about_card2_title">Detail</string>
+    <string name="about_google_play">Google Play</string>
+    <string name="about_email">Email</string>
+    <string name="about_git_hub">Follow me</string>
+    <string name="about_website">My website</string>
+    <string name="about_source_licenses">Liscense</string>
+    <string name="query_hint">都有啥勒？</string>
+    <string name="query_placeholder">候冠华聪明</string>
+    <string name="query_empty_show">人家好像没有这个内容呢，换个关键词试试吧</string>
+    <string name="search_button_text">搜索</string>
+    <string name="pre_show_text">看看我都有啥</string>
+    <string name="developing_text">待开发</string>
 </resources>

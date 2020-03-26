@@ -77,7 +77,7 @@ public class GamerSkyPresenter implements GamerSkyContract.Presenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        view.showError("");
+                        view.showError(e.toString());
                         L.e(TAG,e.toString());
                     }
 

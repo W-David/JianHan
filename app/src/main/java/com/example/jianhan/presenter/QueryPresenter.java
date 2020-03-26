@@ -1,5 +1,6 @@
 package com.example.jianhan.presenter;
 
+import com.example.jianhan.app.Constants;
 import com.example.jianhan.contract.QueryContract;
 import com.example.jianhan.model.bean.MoeImg;
 import com.example.jianhan.model.net.http.FetchMoreQueryUseCase;
@@ -18,13 +19,13 @@ public class QueryPresenter implements QueryContract.Presenter {
     private FetchMoreQueryUseCase moreQueryUseCase;
     private QueryContract.View view;
     private CompositeDisposable compositeDisposable;
-
     public QueryPresenter(FetchMoreQueryUseCase moreQueryUseCase){
         this.moreQueryUseCase = moreQueryUseCase;
     }
     @Override
-    public void refresh() {
+    public void refresh(String queryString) {
         view.showRefreshing();
+        moreQueryUseCase.setQuery(queryString);
         moreQueryUseCase.initOffset();
         moreQueryUseCase.execute()
                 .subscribeOn(Schedulers.io())
@@ -37,7 +38,17 @@ public class QueryPresenter implements QueryContract.Presenter {
 
                     @Override
                     public void onNext(@NonNull MoeImg moeImg) {
-                        view.showQueryImg(moeImg);
+                        L.i(TAG,moeImg.getMessage());
+                        L.i(TAG,"query size: " + moeImg.getData().size());
+                        if(moeImg.getData().size() == 0){
+                            view.showEmptyResult();
+                        }else if(moeImg.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.showQueryImg(moeImg);
+                            view.showBottom();
+                        }else{
+                            view.showQueryImg(moeImg);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
@@ -56,7 +67,6 @@ public class QueryPresenter implements QueryContract.Presenter {
 
     @Override
     public void loadMore() {
-        view.showLoadingMore();
         moreQueryUseCase.offsetPlus();
         moreQueryUseCase.execute()
                 .subscribeOn(Schedulers.io())
@@ -69,7 +79,17 @@ public class QueryPresenter implements QueryContract.Presenter {
 
                     @Override
                     public void onNext(@NonNull MoeImg moeImg) {
-                        view.appendQueryImg(moeImg);
+                        L.i(TAG,moeImg.getMessage());
+                        view.hideLoadingMore();
+                        if(moeImg.getData().size() == 0){
+                            view.showBottom();
+                        }else if(moeImg.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.appendQueryImg(moeImg);
+                            view.showBottom();
+                        }else{
+                            view.appendQueryImg(moeImg);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
@@ -80,7 +100,6 @@ public class QueryPresenter implements QueryContract.Presenter {
 
                     @Override
                     public void onComplete() {
-                        view.hideLoadingMore();
                         L.i(TAG,"loading successfully");
                     }
                 });
@@ -89,7 +108,9 @@ public class QueryPresenter implements QueryContract.Presenter {
     @Override
     public void attachView(QueryContract.View view) {
         this.view = view;
+        compositeDisposable = new CompositeDisposable();
     }
+
 
     @Override
     public void onCreate() {

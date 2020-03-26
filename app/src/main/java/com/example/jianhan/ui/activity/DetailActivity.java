@@ -27,7 +27,9 @@ import com.example.jianhan.model.bean.Info;
 import com.example.jianhan.model.bean.MoeDatum;
 import com.example.jianhan.ui.adapter.DetailAdapter;
 import com.example.jianhan.util.IntentUtil;
+import com.example.jianhan.util.L;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -36,6 +38,8 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends BaseActivity
         implements DetailContract.View ,View.OnClickListener{
+
+    private static final String TAG = "DetailActivity";
 
     @Inject
     DetailContract.Presenter detailPresenter;
@@ -47,13 +51,13 @@ public class DetailActivity extends BaseActivity
     FloatingActionButton fabDetail;
     @BindView(R.id.detail_recycler_view)
     RecyclerView recyclerView;
-
+    @BindView(R.id.progressbar_detail)
+    ProgressBar progressBar;
 
     private Parcelable parcelable;
     private DetailAdapter detailAdapter;
     private Info info;
     private boolean hasMore;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +74,6 @@ public class DetailActivity extends BaseActivity
         detailAdapter = new DetailAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(detailAdapter);
-        progressDialog = new ProgressDialog(this);
         handlerDetailData();
         //is show detail button
         if(!hasMore) fabDetail.setVisibility(View.INVISIBLE);
@@ -91,18 +94,7 @@ public class DetailActivity extends BaseActivity
     }
     @Override
     public void hideProgressBar() {
-        Runnable runnable = () -> progressDialog.dismiss();
-        runOnUiThread(runnable);
-    }
-
-    @Override
-    public void showProgressBar() {
-        Runnable runnable = () -> {
-            progressDialog.setMessage("loading");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        };
-        runOnUiThread(runnable);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     public void handlerDetailData(){
@@ -135,7 +127,7 @@ public class DetailActivity extends BaseActivity
     public void initDetailImg() {
         Runnable runnable = () ->
             setSupportActionBarTitle(info.getTitle());
-            Glide.with(this).load(info.getThumbnail()).into(thumbnailDetail);
+            Picasso.get().load(R.drawable.detail_header).into(thumbnailDetail);
             detailAdapter.setItems(info.getImgUrls());
         runOnUiThread(runnable);
     }

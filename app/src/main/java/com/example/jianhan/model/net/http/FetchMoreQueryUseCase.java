@@ -21,7 +21,6 @@ public class FetchMoreQueryUseCase implements BaseUseCase<MoeImg> {
         this.query = query;
     }
 
-
     public void initOffset() { offset = 1;}
     public void offsetPlus() { this.offset++;}
 

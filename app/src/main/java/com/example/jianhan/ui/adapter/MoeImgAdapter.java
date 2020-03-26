@@ -1,6 +1,5 @@
 package com.example.jianhan.ui.adapter;
 
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +93,7 @@ public class MoeImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_item,parent,false);
             return new MoeImgViewHolder(view);
         }else if(viewType == FOOTER){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_footer,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer,parent,false);
             return new FooterViewHolder(view);
         }else{
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_bottom,parent,false);
@@ -119,7 +118,7 @@ public class MoeImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return items.size();
     }
 
-    static class Item{
+    private static class Item{
 
         private int type;
         private MoeDatum moeDatum;

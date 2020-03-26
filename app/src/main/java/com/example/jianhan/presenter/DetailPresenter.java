@@ -12,7 +12,6 @@ public class DetailPresenter implements DetailContract.Presenter {
 
     @Override
     public void refresh() {
-        view.showProgressBar();
         view.initDetailImg();
         view.hideProgressBar();
     }

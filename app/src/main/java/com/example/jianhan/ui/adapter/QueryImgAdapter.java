@@ -6,46 +6,49 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jianhan.R;
-import com.example.jianhan.model.bean.CosDatum;
-import com.example.jianhan.model.bean.Cosplay;
+import com.example.jianhan.model.bean.MoeDatum;
+import com.example.jianhan.model.bean.MoeImg;
 import com.example.jianhan.ui.adapter.holder.BottomViewHolder;
-import com.example.jianhan.ui.adapter.holder.CosPlayViewHolder;
+import com.example.jianhan.ui.adapter.holder.EmptyResultViewHolder;
 import com.example.jianhan.ui.adapter.holder.FooterViewHolder;
+import com.example.jianhan.ui.adapter.holder.QueryImgViewHolder;
 import com.example.jianhan.util.L;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public class QueryImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int NORMAL = 1;
     private static final int FOOTER = 2;
+    private static final int EMPTY = 3;
     private static final int BOTTOM = 3;
 
-    private static final String TAG = "CosPlayAdapter";
+
+    private static final String TAG = "QueryImgAdapter";
     private List<Item> items;
 
-    public CosPlayAdapter(){
+    public QueryImgAdapter(){
         items = new ArrayList<>();
     }
 
-    public void setItems(Cosplay cosplay){
-        int prevSize = items.size();
+    public void setItems(MoeImg moeImg){
         items.clear();
-        notifyItemRangeRemoved(0,prevSize);
-        addItems(cosplay);
+        notifyDataSetChanged();
+        addItems(moeImg);
     }
 
-    public void addItems(Cosplay cosplay){
+    public void addItems(MoeImg moeImg){
         int startPosition = items.size();
-        for(CosDatum cosDatum: cosplay.getData()) {
+        for(MoeDatum moeDatum: moeImg.getData()){
+            L.i(TAG,moeDatum.getThumbnail());
             Item item = new Item();
             item.setType(NORMAL);
-            item.setCosDatum(cosDatum);
+            item.setMoeDatum(moeDatum);
             items.add(item);
         }
         L.i(TAG,"size: " + startPosition + " to: " + items.size());
@@ -57,14 +60,14 @@ public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Item item = new Item();
         item.setType(FOOTER);
         items.add(item);
-        L.i(TAG,"add footer,cur size: " + items.size());
-        notifyItemInserted(items.size() - 1);
+        notifyItemInserted(getItemCount());
+        notifyItemChanged(getItemCount());
     }
 
     public void removeFooter(){
         items.remove(items.size() - 1);
-        L.i(TAG,"remove footer,cur size: " + items.size());
-        notifyItemRemoved(items.size());
+        notifyItemRemoved(getItemCount());
+        notifyItemChanged(getItemCount());
     }
 
     public void addBottom(){
@@ -73,7 +76,15 @@ public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         items.add(item);
         notifyItemInserted(items.size() - 1);
     }
-
+    public void addEmpty(){
+        int prevSize = items.size();
+        items.clear();
+        notifyItemRangeRemoved(0,prevSize);
+        Item item = new Item();
+        item.setType(EMPTY);
+        items.add(item);
+        notifyItemInserted(items.size() - 1);
+    }
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -89,33 +100,29 @@ public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         }
     }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == NORMAL){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_item,parent,false);
-            return new CosPlayViewHolder(view);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_query_item,parent,false);
+            return new QueryImgViewHolder(view);
         }else if(viewType == FOOTER){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer,parent,false);
             return new FooterViewHolder(view);
+        }else if(viewType == EMPTY){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_empty,parent,false);
+            return new EmptyResultViewHolder(view);
         }else{
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_bottom,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_not_more,parent,false);
             return new BottomViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        L.i(TAG,"bind data: " + position);
-        if(holder instanceof CosPlayViewHolder){
-            ((CosPlayViewHolder) holder).bindData(items.get(position).getCosDatum());
+        if(holder instanceof QueryImgViewHolder){
+            ((QueryImgViewHolder) holder).bindData(items.get(position).getMoeDatum());
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
     }
 
     @Override
@@ -123,10 +130,15 @@ public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return items.get(position).getType();
     }
 
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
     private static class Item{
 
         private int type;
-        private CosDatum cosDatum;
+        private MoeDatum moeDatum;
 
         int getType() {
             return type;
@@ -136,12 +148,12 @@ public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             this.type = type;
         }
 
-        CosDatum getCosDatum() {
-            return cosDatum;
+        MoeDatum getMoeDatum(){
+            return moeDatum;
         }
 
-        void setCosDatum(CosDatum cosDatum) {
-            this.cosDatum = cosDatum;
+        void setMoeDatum(MoeDatum moeDatum){
+            this.moeDatum = moeDatum;
         }
     }
 }

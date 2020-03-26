@@ -45,7 +45,7 @@ public class MoeImgFragment extends Fragment implements MoeImgContract.View {
     private MoeImgAdapter adapter;
     private void injectDependencies(){
         DaggerMoeImgComponent.builder()
-                .applicationComponent(((JianHanApplication) getActivity().getApplication()).getApplicationComponent())
+                .applicationComponent(((JianHanApplication) Objects.requireNonNull(getActivity()).getApplication()).getApplicationComponent())
                 .activityModule(new ActivityModule(getActivity()))
                 .moeImgModule(new MoeImgModule())
                 .build()

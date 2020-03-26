@@ -42,10 +42,10 @@ public class NetworkModule {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(gson);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                .cache(new Cache(FileUtil.getHttpCacheDir(mJianHanApplication), Constants.CacheConfig.HTTP_CACHE_SIZE))
+                .cache(new Cache(FileUtil.getHttpCacheDir(mJianHanApplication), Constants.CacheConfig.HTTP_CACHE_SIZE))
                 .connectTimeout(Constants.CacheConfig.HTTP_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(Constants.CacheConfig.HTTP_READ_TIMEOUT,TimeUnit.MILLISECONDS)
-//                .addInterceptor(new CacheInterceptor())
+                .addInterceptor(new CacheInterceptor())
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BaseUrl)
