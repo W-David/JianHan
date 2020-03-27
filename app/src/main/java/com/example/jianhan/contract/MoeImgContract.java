@@ -19,6 +19,10 @@ public interface MoeImgContract {
         void showMoeImg(MoeImg moeImg);
 
         void appendMoeImg(MoeImg moeImg);
+
+        void showEmptyResult();
+
+        void showBottom();
     }
 
     interface Presenter extends BasePresenter<View>{

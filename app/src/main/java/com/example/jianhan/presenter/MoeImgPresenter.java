@@ -1,6 +1,7 @@
 package com.example.jianhan.presenter;
 
 
+import com.example.jianhan.app.Constants;
 import com.example.jianhan.contract.MoeImgContract;
 import com.example.jianhan.model.bean.MoeImg;
 import com.example.jianhan.model.net.http.FetchMoreMoeImgUseCase;
@@ -39,8 +40,15 @@ public class MoeImgPresenter implements MoeImgContract.Presenter {
                     @Override
                     public void onNext(@NonNull MoeImg moeImg) {
                         L.i(TAG,moeImg.getMessage());
-                        view.showMoeImg(moeImg);
-                        view.showLoadingMore();
+                        if(moeImg.getData().size() == 0){
+                            view.showEmptyResult();
+                        }else if(moeImg.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.showMoeImg(moeImg);
+                            view.showBottom();
+                        }else{
+                            view.showMoeImg(moeImg);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
@@ -72,7 +80,15 @@ public class MoeImgPresenter implements MoeImgContract.Presenter {
                     @Override
                     public void onNext(@NonNull MoeImg moeImg) {
                         view.hideLoadingMore();
-                        view.appendMoeImg(moeImg);
+                        if(moeImg.getData().size() == 0){
+                            view.showBottom();
+                        }else if(moeImg.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.showMoeImg(moeImg);
+                            view.showBottom();
+                        }else{
+                            view.appendMoeImg(moeImg);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
@@ -83,7 +99,6 @@ public class MoeImgPresenter implements MoeImgContract.Presenter {
 
                     @Override
                     public void onComplete() {
-                        view.showLoadingMore();
                         L.i(TAG,"loadMore successfully");
                     }
                 });

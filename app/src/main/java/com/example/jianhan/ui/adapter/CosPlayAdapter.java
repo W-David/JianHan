@@ -13,65 +13,67 @@ import com.example.jianhan.model.bean.CosDatum;
 import com.example.jianhan.model.bean.Cosplay;
 import com.example.jianhan.ui.adapter.holder.BottomViewHolder;
 import com.example.jianhan.ui.adapter.holder.CosPlayViewHolder;
+import com.example.jianhan.ui.adapter.holder.EmptyResultViewHolder;
 import com.example.jianhan.ui.adapter.holder.FooterViewHolder;
 import com.example.jianhan.util.L;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CosPlayAdapter extends BaseAdapter<CosPlayAdapter.Item,RecyclerView.ViewHolder> {
 
 
     private static final int NORMAL = 1;
     private static final int FOOTER = 2;
-    private static final int BOTTOM = 3;
+    private static final int EMPTY =  3;
+    private static final int BOTTOM = 4;
 
     private static final String TAG = "CosPlayAdapter";
-    private List<Item> items;
 
-    public CosPlayAdapter(){
-        items = new ArrayList<>();
+    public CosPlayAdapter(List<Item> dataSet){
+       super(dataSet);
     }
 
     public void setItems(Cosplay cosplay){
-        int prevSize = items.size();
-        items.clear();
-        notifyItemRangeRemoved(0,prevSize);
+        dataSet.clear();
         addItems(cosplay);
     }
 
     public void addItems(Cosplay cosplay){
-        int startPosition = items.size();
         for(CosDatum cosDatum: cosplay.getData()) {
             Item item = new Item();
             item.setType(NORMAL);
             item.setCosDatum(cosDatum);
-            items.add(item);
+            dataSet.add(item);
         }
-        L.i(TAG,"size: " + startPosition + " to: " + items.size());
-        notifyItemRangeInserted(startPosition, items.size() - startPosition);
-        notifyItemRangeChanged(startPosition,items.size() - startPosition);
+        notifyDiff();
+    }
+
+    public void addEmpty(){
+        dataSet.clear();
+        Item item = new Item();
+        item.setType(EMPTY);
+        dataSet.add(item);
+        notifyDiff();
     }
 
     public void addFooter(){
         Item item = new Item();
         item.setType(FOOTER);
-        items.add(item);
-        L.i(TAG,"add footer,cur size: " + items.size());
-        notifyItemInserted(items.size() - 1);
+        dataSet.add(item);
+        notifyDiff();
     }
 
     public void removeFooter(){
-        items.remove(items.size() - 1);
-        L.i(TAG,"remove footer,cur size: " + items.size());
-        notifyItemRemoved(items.size());
+        dataSet.remove(dataSet.size()-1);
+        notifyDiff();
     }
 
     public void addBottom(){
         Item item = new Item();
         item.setType(BOTTOM);
-        items.add(item);
-        notifyItemInserted(items.size() - 1);
+        dataSet.add(item);
+        notifyDiff();
     }
 
     @Override
@@ -99,31 +101,50 @@ public class CosPlayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }else if(viewType == FOOTER){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer,parent,false);
             return new FooterViewHolder(view);
-        }else{
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_bottom,parent,false);
+        }else if(viewType == BOTTOM){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_not_more,parent,false);
             return new BottomViewHolder(view);
+        }else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_empty,parent,false);
+            return new EmptyResultViewHolder(view);
         }
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         L.i(TAG,"bind data: " + position);
         if(holder instanceof CosPlayViewHolder){
-            ((CosPlayViewHolder) holder).bindData(items.get(position).getCosDatum());
+            ((CosPlayViewHolder) holder).bindData(dataSet.get(position).getCosDatum());
         }
     }
 
     @Override
-    public int getItemCount() {
-        return items.size();
+    protected boolean areItemsTheSame(Item oldItem, Item newItem) {
+        if(oldItem.getType() != newItem.getType()) {
+            return false;
+        } else if(oldItem.getType() == NORMAL){
+            return oldItem.getCosDatum().getSort().equals(newItem.getCosDatum().getSort());
+        }else{
+            return true;
+        }
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return items.get(position).getType();
+    protected boolean areContentsTheSame(Item oldItem, Item newItem) {
+        if(oldItem.getType() == NORMAL){
+            return oldItem.getCosDatum().getThumbnail().equals(newItem.getCosDatum().getThumbnail());
+        }
+        return true;
     }
 
-    private static class Item{
+
+    @Override
+    public int getItemViewType(int position) {
+        return dataSet.get(position).getType();
+    }
+
+    static class Item{
 
         private int type;
         private CosDatum cosDatum;

@@ -18,6 +18,10 @@ public interface GamerSkyContract {
         void showGamerSky(GamerSky gamerSky);
 
         void appendGamerSky(GamerSky gamerSky);
+
+        void showEmptyResult();
+
+        void showBottom();
     }
 
     interface Presenter extends BasePresenter<View> {

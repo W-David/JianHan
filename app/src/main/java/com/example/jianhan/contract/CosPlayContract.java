@@ -19,6 +19,10 @@ public interface CosPlayContract {
         void showCosPlay(Cosplay cosplay);
 
         void appendCosPlay(Cosplay cosplay);
+
+        void showEmptyResult();
+
+        void showBottom();
     }
 
     interface Presenter extends BasePresenter<View> {

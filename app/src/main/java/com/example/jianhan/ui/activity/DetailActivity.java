@@ -29,6 +29,7 @@ import com.example.jianhan.ui.adapter.DetailAdapter;
 import com.example.jianhan.util.IntentUtil;
 import com.example.jianhan.util.L;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -63,6 +64,8 @@ public class DetailActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        // set status bar transparent
+        StatusBarUtil.setTransparent(this);
         ButterKnife.bind(this);
         setToolbar(toolbar);
         injectDependencies();
@@ -127,7 +130,7 @@ public class DetailActivity extends BaseActivity
     public void initDetailImg() {
         Runnable runnable = () ->
             setSupportActionBarTitle(info.getTitle());
-            Picasso.get().load(R.drawable.detail_header).into(thumbnailDetail);
+//            Picasso.get().load(R.drawable.detail_header).into(thumbnailDetail);
             detailAdapter.setItems(info.getImgUrls());
         runOnUiThread(runnable);
     }

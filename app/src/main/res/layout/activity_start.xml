@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="96dp"
         android:text="@string/start_text"
-        android:textColor="@color/gray_deep"
+        android:textColor="@color/gray_very_light"
         android:textSize="28sp"
         android:textStyle="bold" />
 

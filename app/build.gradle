@@ -61,6 +61,8 @@ dependencies {
     // other
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+
     // test
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

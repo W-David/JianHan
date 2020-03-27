@@ -94,7 +94,6 @@ public class QueryPresenter implements QueryContract.Presenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        view.showError("loading error");
                         L.e(TAG,e.toString());
                     }
 

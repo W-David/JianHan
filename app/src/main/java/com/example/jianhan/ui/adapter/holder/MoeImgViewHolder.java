@@ -17,9 +17,12 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.jianhan.R;
 import com.example.jianhan.model.bean.MoeDatum;
 import com.example.jianhan.util.IntentUtil;
+import com.example.jianhan.util.L;
 
 public class MoeImgViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+
+    private static final String TAG = "MoeImgViewHolder";
     private CardView cardView;
     private ImageView thumbnail;
     private TextView title;
@@ -38,6 +41,7 @@ public class MoeImgViewHolder extends RecyclerView.ViewHolder implements View.On
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.thumb_card_view){
+            L.i(TAG,"clicked: " + v.getId());
             IntentUtil.intentToDetailActivity((Activity) v.getContext(),meoDatum);
         }
     }

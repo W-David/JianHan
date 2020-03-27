@@ -24,6 +24,8 @@ import com.example.jianhan.model.bean.Cosplay;
 import com.example.jianhan.ui.adapter.CosPlayAdapter;
 import com.example.jianhan.widget.LoadMoreRecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -57,7 +59,7 @@ public class CosPlayFragment extends Fragment implements CosPlayContract.View {
         super.onCreate(savedInstanceState);
         injectDependencies();
         cosplayPresenter.attachView(this);
-        adapter = new CosPlayAdapter();
+        adapter = new CosPlayAdapter(new ArrayList<>());
     }
 
     @Override
@@ -111,20 +113,22 @@ public class CosPlayFragment extends Fragment implements CosPlayContract.View {
 
     @Override
     public void showCosPlay(Cosplay cosplay) {
-        if(cosplay.getData().size() == 0) {
-            adapter.addBottom();
-        }else{
-            adapter.setItems(cosplay);
-        }
+        adapter.setItems(cosplay);
     }
 
     @Override
     public void appendCosPlay(Cosplay cosplay) {
-        if(cosplay.getData().size() == 0){
-            adapter.addBottom();
-        }else{
-            adapter.addItems(cosplay);
-        }
+        adapter.addItems(cosplay);
+    }
+
+    @Override
+    public void showEmptyResult() {
+        adapter.addEmpty();
+    }
+
+    @Override
+    public void showBottom() {
+        adapter.addBottom();
     }
 
     @Override

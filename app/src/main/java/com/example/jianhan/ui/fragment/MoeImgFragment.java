@@ -24,6 +24,7 @@ import com.example.jianhan.ui.adapter.MoeImgAdapter;
 import com.example.jianhan.util.L;
 import com.example.jianhan.widget.LoadMoreRecyclerView;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -56,7 +57,7 @@ public class MoeImgFragment extends Fragment implements MoeImgContract.View {
         super.onCreate(savedInstanceState);
         injectDependencies();
         moeImgPresenter.attachView(this);
-        adapter = new MoeImgAdapter();
+        adapter = new MoeImgAdapter(new ArrayList<>());
     }
 
     @Override
@@ -114,20 +115,22 @@ public class MoeImgFragment extends Fragment implements MoeImgContract.View {
 
     @Override
     public void showMoeImg(MoeImg moeImg) {
-        if(moeImg.getData().size() == 0){
-            adapter.addBottom();
-        }else{
-            adapter.setItems(moeImg);
-        }
+        adapter.setItems(moeImg);
     }
 
     @Override
     public void appendMoeImg(MoeImg moeImg) {
-        if(moeImg.getData().size() == 0){
-            adapter.addBottom();
-        }else{
-            adapter.addItems(moeImg);
-        }
+        adapter.addItems(moeImg);
+    }
+
+    @Override
+    public void showEmptyResult() {
+        adapter.addEmpty();
+    }
+
+    @Override
+    public void showBottom() {
+        adapter.addBottom();
     }
 
     @Override

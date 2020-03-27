@@ -23,6 +23,7 @@ import com.example.jianhan.model.bean.GamerSky;
 import com.example.jianhan.ui.adapter.GamerSkyAdapter;
 import com.example.jianhan.widget.LoadMoreRecyclerView;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -54,7 +55,7 @@ public class GamerSkyFragment extends Fragment implements GamerSkyContract.View 
         super.onCreate(savedInstanceState);
         injectDependencies();
         gamerSkyPresenter.attachView(this);
-        adapter = new GamerSkyAdapter();
+        adapter = new GamerSkyAdapter(new ArrayList<>());
     }
 
     @Override
@@ -111,20 +112,22 @@ public class GamerSkyFragment extends Fragment implements GamerSkyContract.View 
 
     @Override
     public void showGamerSky(GamerSky gamerSky) {
-        if(gamerSky.getData().size() == 0){
-            adapter.addBottom();
-        }else{
-            adapter.setItems(gamerSky);
-        }
+        adapter.setItems(gamerSky);
     }
 
     @Override
     public void appendGamerSky(GamerSky gamerSky) {
-        if(gamerSky.getData().size() == 0 ){
-            adapter.addBottom();
-        }else{
-            adapter.addItems(gamerSky);
-        }
+        adapter.addItems(gamerSky);
+    }
+
+    @Override
+    public void showEmptyResult() {
+        adapter.addEmpty();
+    }
+
+    @Override
+    public void showBottom() {
+        adapter.addBottom();
     }
 
     @Override

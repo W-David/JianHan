@@ -1,5 +1,6 @@
 package com.example.jianhan.presenter;
 
+import com.example.jianhan.app.Constants;
 import com.example.jianhan.contract.GamerSkyContract;
 import com.example.jianhan.model.bean.GamerSky;
 import com.example.jianhan.model.net.http.FetchMoreGamerSkyUseCase;
@@ -39,13 +40,19 @@ public class GamerSkyPresenter implements GamerSkyContract.Presenter {
                     @Override
                     public void onNext(@NonNull GamerSky gamerSky) {
                         L.i(TAG,gamerSky.getData().toString());
-                        view.showGamerSky(gamerSky);
-                        view.showLoadingMore();
+                        if(gamerSky.getData().size() == 0){
+                            view.showEmptyResult();
+                        }else if(gamerSky.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.showGamerSky(gamerSky);
+                            view.showBottom();
+                        }else{
+                            view.showGamerSky(gamerSky);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        view.showError("o((⊙﹏⊙))o.");
                         L.e(TAG,e.toString());
                     }
 
@@ -72,7 +79,15 @@ public class GamerSkyPresenter implements GamerSkyContract.Presenter {
                     @Override
                     public void onNext(@NonNull GamerSky gamerSky) {
                         view.hideLoadingMore();
-                        view.appendGamerSky(gamerSky);
+                        if(gamerSky.getData().size() == 0 ){
+                            view.showBottom();
+                        }else if(gamerSky.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.appendGamerSky(gamerSky);
+                            view.showBottom();
+                        }else{
+                            view.appendGamerSky(gamerSky);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
@@ -83,7 +98,6 @@ public class GamerSkyPresenter implements GamerSkyContract.Presenter {
 
                     @Override
                     public void onComplete() {
-                        view.showLoadingMore();
                         L.i(TAG,"loadMore successfully");
                     }
                 });

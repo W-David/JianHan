@@ -26,6 +26,7 @@ import com.example.jianhan.model.bean.MoeImg;
 import com.example.jianhan.ui.adapter.QueryImgAdapter;
 import com.example.jianhan.widget.LoadMoreRecyclerView;
 import com.google.android.material.button.MaterialButton;
+import com.jaeger.library.StatusBarUtil;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
@@ -44,7 +45,8 @@ import butterknife.ButterKnife;
 
 public class QueryActivity extends BaseActivity implements
         MaterialSearchBar.OnSearchActionListener,
-        QueryContract.View{
+        QueryContract.View,
+        View.OnClickListener{
 
     @Inject
     QueryContract.Presenter queryPresenter;
@@ -61,19 +63,21 @@ public class QueryActivity extends BaseActivity implements
 
 
     private QueryImgAdapter adapter;
+    private static String prevSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query);
+
+        StatusBarUtil.setTransparent(this);
         ButterKnife.bind(this);
         // toolbar setting
         setToolbar(toolbar);
         setSupportActionBarTitle("搜索");
-        injectDependencies();
-        // bind view and presenter
+        injectDependencies(); // bind view and presenter
         queryPresenter.attachView(this);
         // adapter
-        adapter = new QueryImgAdapter();
+        adapter = new QueryImgAdapter(new ArrayList<>());
         //search bar setting
         searchBar.setOnSearchActionListener(this);
         searchBar.setCardViewElevation(12);
@@ -109,7 +113,10 @@ public class QueryActivity extends BaseActivity implements
         if(text.length() == 0){
             Toast.makeText(this,"你倒是给点东西啊w(ﾟДﾟ)w",Toast.LENGTH_SHORT).show();
         }else{
-            queryPresenter.refresh(text.toString());
+            if(prevSearch != text.toString()){
+                queryPresenter.refresh(text.toString());
+            }
+            prevSearch = text.toString();
         }
     }
 
@@ -123,7 +130,7 @@ public class QueryActivity extends BaseActivity implements
     @Override
     public void showRefreshing() {
         Runnable runnable = () ->{
-            textView.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         };
         runOnUiThread(runnable);
@@ -131,7 +138,7 @@ public class QueryActivity extends BaseActivity implements
 
     @Override
     public void hideRefreshing() {
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -146,34 +153,31 @@ public class QueryActivity extends BaseActivity implements
 
     @Override
     public void showQueryImg(MoeImg moeImg) {
-        if(moeImg.getData().size() == 0){
-            adapter.addBottom();
-        }else{
-            adapter.addItems(moeImg);
-        }
+        adapter.setItems(moeImg);
     }
 
     @Override
     public void appendQueryImg(MoeImg moeImg) {
-        if(moeImg.getData().size() == 0){
-            adapter.addBottom();
-        }else{
-            adapter.setItems(moeImg);
-        }
+        adapter.addItems(moeImg);
     }
 
     @Override
     public void showEmptyResult() {
-
+        adapter.addEmpty();
     }
 
     @Override
     public void showBottom() {
-
+        adapter.addBottom();
     }
 
     @Override
     public void showError(String ErrorString) {
         Toast.makeText(this,ErrorString,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

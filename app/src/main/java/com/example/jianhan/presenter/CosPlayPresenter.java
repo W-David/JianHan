@@ -1,5 +1,6 @@
 package com.example.jianhan.presenter;
 
+import com.example.jianhan.app.Constants;
 import com.example.jianhan.contract.CosPlayContract;
 import com.example.jianhan.model.bean.Cosplay;
 import com.example.jianhan.model.net.http.FetchMoreCosPlayUseCase;
@@ -40,8 +41,15 @@ public class CosPlayPresenter implements CosPlayContract.Presenter {
                     @Override
                     public void onNext(@NonNull Cosplay cosplay) {
                         L.i(TAG,cosplay.getMessage());
-                        view.showCosPlay(cosplay);
-                        view.showLoadingMore();
+                        if(cosplay.getData().size() == 0){
+                            view.showEmptyResult();
+                        }else if(cosplay.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.showCosPlay(cosplay);
+                            view.showBottom();
+                        }else{
+                            view.showCosPlay(cosplay);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
@@ -75,7 +83,15 @@ public class CosPlayPresenter implements CosPlayContract.Presenter {
                     public void onNext(@NonNull Cosplay cosplay) {
                         L.i(TAG,cosplay.getData().toString() + "something out");
                         view.hideLoadingMore();
-                        view.appendCosPlay(cosplay);
+                        if(cosplay.getData().size() == 0){
+                            view.showBottom();
+                        }else if(cosplay.getData().size() < Constants.HTTP.DEFAULT_NUM){
+                            view.showCosPlay(cosplay);
+                            view.showBottom();
+                        }else{
+                            view.appendCosPlay(cosplay);
+                            view.showLoadingMore();
+                        }
                     }
 
                     @Override
@@ -86,7 +102,6 @@ public class CosPlayPresenter implements CosPlayContract.Presenter {
 
                     @Override
                     public void onComplete() {
-                        view.showLoadingMore();
                         L.i(TAG,"loadMore successfully");
                     }
                 });

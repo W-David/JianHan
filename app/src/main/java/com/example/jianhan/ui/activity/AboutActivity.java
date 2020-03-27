@@ -1,6 +1,5 @@
 package com.example.jianhan.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import com.example.jianhan.R;
 import com.example.jianhan.app.Constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.List;
 
@@ -39,10 +39,11 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        StatusBarUtil.setTransparent(this);
         ButterKnife.bind(this);
         setToolbar(toolbar);
         setSupportActionBarTitle("About");
-        getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+        StatusBarUtil.setTransparent(this);
         initView();
     }
 

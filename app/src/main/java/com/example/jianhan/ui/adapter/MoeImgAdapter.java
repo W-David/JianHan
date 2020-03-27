@@ -12,63 +12,65 @@ import com.example.jianhan.R;
 import com.example.jianhan.model.bean.MoeDatum;
 import com.example.jianhan.model.bean.MoeImg;
 import com.example.jianhan.ui.adapter.holder.BottomViewHolder;
+import com.example.jianhan.ui.adapter.holder.EmptyResultViewHolder;
 import com.example.jianhan.ui.adapter.holder.FooterViewHolder;
 import com.example.jianhan.ui.adapter.holder.MoeImgViewHolder;
-import com.example.jianhan.util.L;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class MoeImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MoeImgAdapter extends BaseAdapter<MoeImgAdapter.Item,RecyclerView.ViewHolder> {
 
     private static final int NORMAL = 1;
     private static final int FOOTER = 2;
-    private static final int BOTTOM = 3;
+    private static final int EMPTY = 3;
+    private static final int BOTTOM = 4;
 
     private static final String TAG = "MoeImgAdapter";
-    private List<Item> items;
 
-    public MoeImgAdapter(){
-        items = new ArrayList<>();
+    public MoeImgAdapter(List<Item> dataSet){
+        super(dataSet);
     }
 
     public void setItems(MoeImg moeImg){
-        int prevSize = items.size();
-        items.clear();
-        notifyItemRangeRemoved(0,prevSize);
+        dataSet.clear();
         addItems(moeImg);
     }
 
     public void addItems(MoeImg moeImg){
-        int startPosition = items.size();
         for(MoeDatum moeDatum: moeImg.getData()){
             Item item = new Item();
             item.setType(NORMAL);
             item.setMoeDatum(moeDatum);
-            items.add(item);
+            dataSet.add(item);
         }
-        L.i(TAG,"size: " + startPosition + " to: " + items.size());
-        notifyItemRangeInserted(startPosition, items.size() - startPosition);
-        notifyItemRangeChanged(startPosition,items.size() - startPosition);
+        notifyDiff();
     }
 
     public void addFooter(){
         Item item = new Item();
         item.setType(FOOTER);
-        items.add(item);
-        notifyItemInserted(items.size() - 1);
+        dataSet.add(item);
+        notifyDiff();
     }
 
     public void removeFooter(){
-        items.remove(items.size() - 1);
-        notifyItemRemoved(items.size());
+        if(dataSet.get(dataSet.size()-1).getType() == BOTTOM) return;
+        dataSet.remove(dataSet.size() - 1);
+        notifyDiff();
     }
 
+    public void addEmpty(){
+        dataSet.clear();
+        Item item = new Item();
+        item.setType(EMPTY);
+        dataSet.add(item);
+        notifyDiff();
+    }
     public void addBottom(){
+        if(dataSet.get(dataSet.size()-1).getType() == BOTTOM) return;
         Item item = new Item();
         item.setType(BOTTOM);
-        items.add(item);
-        notifyItemInserted(items.size() - 1);
+        dataSet.add(item);
+        notifyDiff();
     }
 
     @Override
@@ -95,30 +97,47 @@ public class MoeImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }else if(viewType == FOOTER){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer,parent,false);
             return new FooterViewHolder(view);
-        }else{
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_recycler_bottom,parent,false);
+        }else if(viewType == BOTTOM){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_not_more,parent,false);
             return new BottomViewHolder(view);
+        }else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_empty,parent,false);
+            return new EmptyResultViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof MoeImgViewHolder){
-            ((MoeImgViewHolder) holder).bindData(items.get(position).getMoeDatum());
+            ((MoeImgViewHolder) holder).bindData(dataSet.get(position).getMoeDatum());
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).getType();
+        return dataSet.get(position).getType();
     }
 
     @Override
-    public int getItemCount() {
-        return items.size();
+    protected boolean areItemsTheSame(Item oldItem, Item newItem) {
+        if(oldItem.getType() != newItem.getType()){
+            return false;
+        }else if(oldItem.getType() == NORMAL){
+            return oldItem.getMoeDatum().getSort().equals(newItem.getMoeDatum().getSort());
+        }else{
+            return true;
+        }
     }
 
-    private static class Item{
+    @Override
+    protected boolean areContentsTheSame(Item oldItem, Item newItem) {
+        if(oldItem.getType() == NORMAL){
+            return oldItem.getMoeDatum().getThumbnail().equals(newItem.getMoeDatum().getThumbnail());
+        }
+        return true;
+    }
+
+    static class Item{
 
         private int type;
         private MoeDatum moeDatum;

@@ -15,10 +15,13 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.jianhan.R;
 import com.example.jianhan.model.bean.MoeDatum;
+import com.example.jianhan.ui.activity.QueryActivity;
 import com.example.jianhan.util.IntentUtil;
+import com.example.jianhan.util.L;
 
 public class QueryImgViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    private static final String TAG = "QueryImgViewHolder";
     private CardView cardView;
     private ImageView imageView;
     private MoeDatum moeDatum;
@@ -34,7 +37,8 @@ public class QueryImgViewHolder extends RecyclerView.ViewHolder implements View.
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.search_thumb_card_view){
-            IntentUtil.intentToDetailActivity((Activity) v.getContext(), moeDatum);
+            L.i(TAG,"clicked: " + v.getId());
+            IntentUtil.intentToDetailActivity((QueryActivity) v.getContext(), moeDatum);
         }
     }
 
@@ -47,6 +51,7 @@ public class QueryImgViewHolder extends RecyclerView.ViewHolder implements View.
                 .transition(DrawableTransitionOptions.withCrossFade(fadeFactory))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.color.white)
+                .error(R.drawable.error_holder)
                 .into(imageView);
     }
 

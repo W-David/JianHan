@@ -19,6 +19,7 @@
     </style>
 
     <style name="AppTheme.NoActionBar.TransparentStatus">
+
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 

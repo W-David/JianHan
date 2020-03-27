@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.widget.Toast;
 
 import com.example.jianhan.R;
+import com.jaeger.library.StatusBarUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 public class StartActivity extends AppCompatActivity {
@@ -18,6 +19,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        StatusBarUtil.setTransparent(this);
     }
 
     @Override
